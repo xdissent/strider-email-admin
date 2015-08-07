@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block preTitle %}
+  Admin: Email -
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="/ext/email-admin/app.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block bodyContent %}
+
+  {% for messages in flash %}
+    {% set type = loop.key %}
+    {% for message in messages %}
+      <div class="alert alert-{{type}}">{{ message|raw }}</div>
+    {% endfor %}
+  {% endfor %}
+
+  <div class="row-fluid" ng-controller="AlertsController">
+    <div class="span12" ng-controller="EmailAdminController">
+      <h3>Admin: Email</h3>
+
+      <div class="notify-wrapper pull-right">
+        <div id="notify" ng-class="{ visible: message.showing }" class="alert alert-[[ message.type ]]">
+          <a type="button" class="close" ng-click="clearMessage()">&times;</a>
+          <div class="message" ng-bind-html="message.text"></div>
+        </div>
+      </div>
+
+      <div class="modal-backdrop fade"
+        ng-class="{hide: !previewing, in: previewing}"
+        ng-click="close($event)"></div>
+      <div class="modal fade" ng-class="{in: previewing}">
+        <div class="modal-header">
+          <button type="button" class="close" ng-click="close($event)">&times;</button>
+          <h3>Preview: [[previewing.name]]</h3>
+        </div>
+        <div class="modal-body" ng-show="previewResult">
+          <h4>Subject</h4>
+          <p class="well">[[previewResult.subject]]</p>
+          <hr />
+          <h4>HTML</h4>
+          <div class="well" ng-bind-html="previewResult.html"></div>
+          <hr />
+          <h4>Plaintext</h4>
+          <pre>[[previewResult.text]]</pre>
+        </div>
+        <div class="modal-body" ng-show="previewErrors">
+          <h4>Errors</h4>
+          <p class="alert alert-error" ng-repeat="error in previewErrors.errors">[[error]]</p>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="btn" ng-click="close($event)">Close</a>
+        </div>
+      </div>
+
+      {% for template in templates %}
+        <form name="emailForm"
+          class="well form-horizontal ng-cloak"
+          ng-controller="EmailTemplateController"
+          ng-init="template = {{JSON.stringify(template)}}; orig = {{JSON.stringify(template)}}; ">
+
+          <fieldset>
+            <legend>{{template.name}}</legend>
+
+            <div class="control-group">
+              <label class="control-label">Variables</label>
+              <div class="controls">
+                <span ng-repeat="(varName, ex) in template.data">
+                  <span class="label label-info">[[varName]]</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label" for="subject">Subject</label>
+              <div class="controls">
+                <input name="subject" type="text" id="subject_{{template.id}}"
+                  ng-model="template.subject"
+                  placeholder="Subject"
+                  class="input-block-level" required>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label" for="html">HTML</label>
+              <div class="controls">
+                <textarea name="html" rows="10"
+                  class="input-block-level"
+                  style="font-family: monospace"
+                  ng-model="template.html"
+                  id="html_{{template.id}}" required></textarea>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label" for="text">Plaintext</label>
+              <div class="controls">
+                <textarea name="text" rows="10"
+                  class="input-block-level"
+                  style="font-family: monospace"
+                  ng-model="template.text"
+                  id="text_{{template.id}}" required></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-primary"
+                ng-disabled="saving || testing || previewing || (emailForm.subject.$pristine && emailForm.html.$pristine && emailForm.text.$pristine) || !(emailForm.subject.$valid && emailForm.html.$valid && emailForm.text.$valid)"
+                ng-click="save($event)">
+                  <i class="fa fa-spinner fa-spin" ng-show="saving"></i>
+                  Save changes
+              </button>
+              <button class="btn btn-info"
+                ng-disabled="saving || testing || previewing || !emailForm.subject.$valid || !emailForm.html.$valid || !emailForm.text.$valid"
+                ng-click="preview($event)">Preview</button>
+              <button class="btn btn-warning"
+                ng-disabled="saving || testing || previewing || !emailForm.$valid"
+                ng-click="test($event)">
+                <i class="fa fa-spinner fa-spin" ng-show="testing"></i>
+                Send Test
+              </button>
+              <input class="input-medium" name="email" type="email"
+                ng-model="email"
+                ng-readonly="testing"
+                placeholder="Email Address" required />
+              <button class="btn pull-right"
+                ng-disabled="saving || testing || previewing || (emailForm.subject.$pristine && emailForm.html.$pristine && emailForm.text.$pristine)"
+                ng-click="reset($event)">Cancel</button>
+            </div>
+          </fieldset>
+        </form>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{
+  "name": "strider-email-admin",
+  "version": "0.1.0",
+  "description": "Manage Strider email templates",
+  "author": "Greg Thornton <xdissent@me.com>",
+  "dependencies": {},
+  "peerDependencies": {
+    "async": "^1.2.1",
+    "jade": "^0.35.0",
+    "mongoose": "3.8.*",
+    "strider-mailer": "^0.2.0",
+    "swig": "^0.14.0"
+  },
+  "strider": {
+    "id": "email-admin",
+    "title": "Strider Email Admin",
+    "icon": "icon.png",
+    "webapp": "lib/webapp.js"
+  }
+}
