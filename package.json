@@ -2,7 +2,23 @@
   "name": "strider-email-admin",
   "version": "0.1.0",
   "description": "Manage Strider email templates",
+  "main": "lib/webapp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xdissent/strider-email-admin.git"
+  },
+  "keywords": [
+    "strider"
+  ],
   "author": "Greg Thornton <xdissent@me.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xdissent/strider-email-admin/issues"
+  },
+  "homepage": "https://github.com/xdissent/strider-email-admin#readme",
   "dependencies": {},
   "peerDependencies": {
     "async": "^1.2.1",
