@@ -11,10 +11,10 @@
 * Send test emails
 * Jade rendering / variable substition (subject, HTML and plaintext)
 * Stock Strider templates are used by default
+* Edit `strider-email-notifier` templates
 
 ## Todo
 
 * Eliminate `base.html` overriding.
 * Auto-prefix plaintext templates with pipe.
 * Docs.
-* Hijack `strider-email-notifier` templates.
